@@ -1,8 +1,11 @@
 package org.zerock;
 
 import java.awt.print.Pageable;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+
+import javax.security.auth.message.callback.PrivateKeyCallback.Request;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -65,7 +68,6 @@ public class Boot03ApplicationTests {
 		results.forEach(board -> System.out.println(board));
 	}
 
-	@Test
 	public void TestBnoPagingSort() {
 		org.springframework.data.domain.Pageable paging = PageRequest.of(0, 10, Sort.Direction.ASC, "bno");
 //		Collection<Board> results = boardRepo.findByBnoGreaterThan(0L, paging);
@@ -80,6 +82,21 @@ public class Boot03ApplicationTests {
 
 		List<Board> list = result.getContent();
 		list.forEach(board -> System.out.println(board));
+	}
+
+	public void testByTitle17() {
+		boardRepo.findByTitle2("17").forEach(arr -> System.out.println(Arrays.toString(arr)));
+	}
+
+	public void testByTitle20() {
+		boardRepo.findByTitle3("20").forEach(arr -> System.out.println(Arrays.toString(arr)));
+	}
+
+	@Test
+	public void testByPaging() {
+		org.springframework.data.domain.Pageable pageable = PageRequest.of(0, 10);
+		boardRepo.findBypage(pageable).forEach(board -> System.out.println(board));
+
 	}
 
 }
