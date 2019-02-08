@@ -16,7 +16,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.zerock.domain.Board;
+import org.zerock.domain.QBoard;
 import org.zerock.persistence.BoardRepository;
+
+import com.fasterxml.jackson.databind.util.ArrayBuilders.BooleanBuilder;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -92,11 +95,35 @@ public class Boot03ApplicationTests {
 		boardRepo.findByTitle3("20").forEach(arr -> System.out.println(Arrays.toString(arr)));
 	}
 
-	@Test
 	public void testByPaging() {
 		org.springframework.data.domain.Pageable pageable = PageRequest.of(0, 10);
 		boardRepo.findBypage(pageable).forEach(board -> System.out.println(board));
 
+	}
+
+	public void testPredicate() {
+		String type = "t";
+		String keyword = "17";
+		com.querydsl.core.BooleanBuilder builder = new com.querydsl.core.BooleanBuilder();
+
+		QBoard board = QBoard.board;
+
+		if (type.equals("t")) {
+			builder.and(board.title.like("%" + keyword + "%"));
+		}
+
+		builder.and(board.bno.gt(0L));
+		org.springframework.data.domain.Pageable pageable = PageRequest.of(0, 10);
+
+		Page<Board> result = boardRepo.findAll(builder, pageable);
+
+		System.out.println("PAGE SIZE: " + result.getSize());
+		System.out.println("TOTAL PAGES: " + result.getTotalPages());
+		System.out.println("TOTAL COUNT: " + result.getTotalElements());
+		System.out.println("NEXT: " + result.nextPageable());
+
+		List<Board> list = result.getContent();
+		list.forEach(b -> System.out.println(b));
 	}
 
 }

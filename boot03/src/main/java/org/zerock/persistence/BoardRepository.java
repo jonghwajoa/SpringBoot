@@ -6,10 +6,11 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.CrudRepository;
 import org.zerock.domain.Board;
 
-public interface BoardRepository extends CrudRepository<Board, Long> {
+public interface BoardRepository extends CrudRepository<Board, Long>, QuerydslPredicateExecutor<Board> {
 	public java.util.List<Board> findBoardByTitle(String title);
 
 	public Collection<Board> findByWriter(String writer);
@@ -39,7 +40,7 @@ public interface BoardRepository extends CrudRepository<Board, Long> {
 
 	@Query(value = "select bno, title, writer from tbl_boards where title like CONCAT('%',?1, '%') and bno > 0 order by bno desc", nativeQuery = true)
 	public List<Object[]> findByTitle3(String title);
-	
+
 	@Query("select b from Board b where b.bno > 0 order by b.bno desc")
 	public List<Board> findBypage(Pageable pageable);
 }
