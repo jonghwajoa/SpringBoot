@@ -140,5 +140,91 @@ Querydsl을 이용하기 위해 필요한 과정
 
 * IDENTITY : AI 설정
 
-* 
+
+
+
+### 1:N 관계
+
+특이하게도 M:N관계가 아닌 1:N관계에서도 별도의 테이블을 생성함 
+두개의 테이블 각각의 기본키를 저장하는 테이블을 생성함..
+이것이 싫다면 @JoinTable , @JoinColumn을 이용함
+
+* JoinTable : 자동으로 생성되는 테이블 대신 별도의 이름을 가진 테이블을 생성
+* JoinColumn : 이미 존재하는 테이블에 칼럼을 추가할 때 사용
+
+> 다에 해당하는 정보를 보관하기 위해서 추가 테이블을 만드는것
+
+
+
+### Repository 작성
+
+여러 엔티티들의 Repository 개수를 판단하는 데 가장 중요한 영향을 미치는 것은 엔티티 객체의 **라이프사이클**
+
+각 엔티티가 별도의 라이프사이클을 가진다면 별도의 Repository를 생성하는 것이좋음.
+
+### 
+
+### Transactional
+
+기본적으로 롤백 처리를 시도하기 때문에 @Commit을 추가해서 자동 Commit 처리를 지정할 수 있음
+
+
+
+### 양방향 처리
+
+양방향 처리는 단방향의 제한적인 접근에 비해 운용의 폭이 넓은 것은 사실임.. 다만.. 
+
+최종적으로 실행되는 SQL이 성능에 나쁜 영향을 주는지를 항상 체크해주어야함..
+
+
+
+### 지연 로딩
+
+JPA는 연관관계가 있는 엔티티를 조회할 때 기본적으로 '지연로딩'이라는 방식을 이용함
+
+> 정보가 필요하기 전까지는 최대한 테이블에 접근하지 않는 방식을 의미함.
+
+가장 큰 이유는 **성능**
+
+조인이 복잡해질수록 성능이 저하되기 때문..
+
+연관관계의 Collection타입을 처리할 때 **지연 로딩**을 기본으로 사용함.
+
+즉시로딩은 조인을 이용해서 필요한 모든 정보를 처리하게 됨..
+
+```java
+@OneToMany(fetch=FetchType.EAGER)
+```
+
+
+
+
+
+```java
+@Transactional
+	@Test
+	public void insertReply2Way() {
+		Optional<FreeBoard> result = boardRepo.findById(199L);
+		result.ifPresent(board -> {
+			List<FreeBoardReply> replies = board.getReplies();
+			FreeBoardReply reply = new FreeBoardReply();
+			reply.setReply("reply....");
+			reply.setReplyer("replayer00");
+			reply.setBoard(board);
+
+			replies.add(reply);
+			board.setReplies(replies);
+			boardRepo.save(board);
+		});
+	}
+```
+
+
+
+# 어노테이션
+
+- @Log : lombok의 로그를 사용할 떄 이용하는 어노테이션
+- @commit 테스트 결과를 데이터 베이스에 commit하는 용도
+
+
 

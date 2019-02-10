@@ -16,4 +16,5 @@ public interface MemberRepository extends CrudRepository<Member, String> {
 			+ "ON m.uid = p.member where m.uid = ?1 and p.current = true")
 	public List<Object[]> getMemberWithProfile(String uid);
 
+
 }

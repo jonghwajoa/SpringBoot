@@ -5,4 +5,5 @@ import org.zerock.domain.Profile;
 
 public interface ProfileRepository extends CrudRepository<Profile, Long>{
 
+
 }
