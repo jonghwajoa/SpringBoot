@@ -1,0 +1,28 @@
+<html xmlns:th="http:/www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<table border="1">
+		<tr>
+			<td>index</td>
+			<td>count</td>
+			<td>isOdd</td>
+			<td>MID</td>
+			<td>MNAME</td>
+			<td>REGDATE</td>
+		</tr>
+
+		<tr th:each="member, curState : ${list}">
+			<td th:text=" ${curState.index} "></td>
+			<td th:text=" ${curState.count} "></td>
+			<td th:text=" ${curState.odd} "></td>
+			<td th:text=" ${member.mid}"> </td>
+			<td th:text=" ${member.mname}"></td>
+			<td th:text=" ${#dates.format(member.regdate,'yyyy-mm-dd')}"></td>
+		</tr>
+	</table>
+
+</body>
+</html>

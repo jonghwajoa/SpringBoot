@@ -1,0 +1,26 @@
+<html xmlns:th="http:/www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<table border="1" th:with="target='u01'">
+		<tr>
+
+			<td>MID</td>
+			<td>MNAME</td>
+			<td>REGDATE</td>
+		</tr>
+
+		<tr th:each="member, curState : ${list}">
+			<td th:if="${member.mid}">
+				<a href="/modify" th:if="${member.mid == target}"> MODIFY</a>
+				<p th:unleftt="${member.mid == target}">VIEW</p>
+			</td>
+			<td th:text=" ${member.mname}"></td>
+			<td th:text=" ${#dates.format(member.regdate,'yyyy-mm-dd')}"></td>
+		</tr>
+	</table>
+
+</body>
+</html>
